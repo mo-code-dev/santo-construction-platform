@@ -1,0 +1,2 @@
+'use client';
+export default function Error({reset}:{error:Error & {digest?:string};reset:()=>void}){return <main className="grid min-h-screen place-items-center bg-[var(--parchment)] px-6 text-center"><div><div className="eyebrow text-[var(--terracotta)]">500</div><h1 className="serif mt-3 text-6xl">Something went wrong.</h1><p className="mt-4 text-[var(--graphite)]">Please try the action again.</p><button onClick={reset} className="pill mt-7 bg-[var(--terracotta)] px-5 py-3 font-bold text-white">Try again</button></div></main>}

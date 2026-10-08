@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function Page(){return <main className="grid min-h-screen place-items-center bg-[var(--parchment)] px-6 text-center"><div><div className="eyebrow text-[var(--terracotta)]">403</div><h1 className="serif mt-3 text-6xl">Access denied.</h1><p className="mt-4 text-[var(--graphite)]">You do not have permission to view this area.</p><Link href="/app" className="pill mt-7 inline-block bg-[var(--terracotta)] px-5 py-3 font-bold text-white">Back to Santo</Link></div></main>}
