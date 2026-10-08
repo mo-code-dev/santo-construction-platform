@@ -36,6 +36,19 @@ const nav=[
 function FileCheckIcon(p:React.ComponentProps<typeof FileText>){return <FileText {...p}/>}
 const labelKeys=nav.reduce<Record<string,string>>((a,n)=>(a[n.key]=n.key,a),{});
 
+type SearchRecord={id:string;title:string;meta:string;type:string;href:string};
+
+const globalSearchRecords:SearchRecord[]=[
+ ...projects.map((x:any)=>({id:`project-${x.id}`,title:x.name,meta:`${x.location} · ${x.manager}`,type:'Project',href:'/app/projects'})),
+ ...tasks.map((x:any,i:number)=>({id:`task-${i}`,title:x.title,meta:`${x.project} · ${x.assignee}`,type:'Task',href:'/app/tasks'})),
+ ...employees.map((x:any,i:number)=>({id:`employee-${i}`,title:x.name,meta:`${x.role} · ${x.department}`,type:'Employee',href:'/app/hr'})),
+ ...materials.map((x:any,i:number)=>({id:`material-${i}`,title:x.name,meta:`${x.category} · ${x.project}`,type:'Material',href:'/app/materials'})),
+ ...suppliers.map((x:any,i:number)=>({id:`supplier-${i}`,title:x.name,meta:`${x.category} · ${x.status}`,type:'Supplier',href:'/app/suppliers'})),
+ ...equipment.map((x:any,i:number)=>({id:`equipment-${i}`,title:x.name,meta:`${x.type} · ${x.site}`,type:'Equipment',href:'/app/equipment'})),
+ ...invoices.map((x:any)=>({id:`invoice-${x.no}`,title:x.no,meta:`${x.project} · ${x.amount}`,type:'Invoice',href:'/app/accounting'})),
+ ...documents.map((x:any,i:number)=>({id:`document-${i}`,title:x.name,meta:`${x.type} · ${x.project}`,type:'Document',href:'/app/documents'})),
+];
+
 type StatusType='ok'|'warn'|'bad'|'neutral';
 
 function getStatusType(text:string):StatusType{
@@ -52,6 +65,17 @@ export default function SantoApp(){
  const current=useMemo(()=>path==='/app'?'overview':path.split('/')[2]||'overview',[path]);
  const groups=useMemo(()=>Array.from(new Set(nav.map(x=>x.group))),[]);
  const activeLabel=t(labelKeys[current]??'overview');
+ const searchResults=useMemo(()=>{
+   const term=query.trim().toLowerCase();
+   if(term.length<2)return [];
+   return globalSearchRecords.filter((item)=>`${item.title} ${item.meta} ${item.type}`.toLowerCase().includes(term)).slice(0,8);
+ },[query]);
+ const submitSearch=()=>{
+   const first=searchResults[0];
+   if(!first)return;
+   setQuery('');
+   router.push(first.href);
+ };
  const signOut=()=>{localStorage.removeItem('santo-demo-auth');router.push('/login')};
  const openQuick=(label='')=>{setQuickContext(label);setQuick(true);}; const runQuick=(label:string)=>{setQuick(false);setQuickContext('');setNotice(true);setTimeout(()=>setNotice(false),1900);};
  return <div className="min-h-screen bg-[var(--parchment)] text-[var(--ink)]">
@@ -73,7 +97,7 @@ export default function SantoApp(){
    <div className={`transition-all ${collapsed?'lg:pl-[90px] rtl:lg:pr-[90px] rtl:lg:pl-0':'lg:pl-[278px] rtl:lg:pr-[278px] rtl:lg:pl-0'}`}>
      <header className="sticky top-0 z-30 flex h-[78px] items-center justify-between gap-4 border-b border-[var(--taupe)] bg-[rgba(254,249,239,.95)] px-4 backdrop-blur sm:px-7">
        <div className="flex min-w-0 items-center gap-3"><button onClick={()=>setMobile(true)} className="grid size-10 place-items-center rounded-full border border-[var(--taupe)] bg-[var(--parchment)] lg:hidden"><Menu size={19}/></button><div className="hidden text-xs text-[var(--graphite)] sm:block">Santo / <span className="font-semibold text-[var(--ink)]">{activeLabel}</span></div></div>
-       <div className="relative hidden w-full max-w-[430px] md:block"><Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-[var(--graphite)] rtl:left-auto rtl:right-3.5"/><input value={query} onChange={e=>setQuery(e.target.value)} className="focus-ring w-full rounded-full border border-[var(--ash)] bg-[var(--parchment)] py-3 pl-10 pr-4 text-sm outline-none rtl:pl-4 rtl:pr-10" placeholder={t('search')}/></div>
+       <div className="relative hidden w-full max-w-[430px] md:block"><Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-[var(--graphite)] rtl:left-auto rtl:right-3.5"/><input value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>{if(e.key==='Enter')submitSearch();if(e.key==='Escape')setQuery('')}} className="focus-ring w-full rounded-full border border-[var(--ash)] bg-[var(--parchment)] py-3 pl-10 pr-4 text-sm outline-none rtl:pl-4 rtl:pr-10" placeholder={t('search')} aria-label={t('search')}/>{query.trim().length>=2&&<div className="absolute left-0 right-0 top-[calc(100%+10px)] z-50 overflow-hidden rounded-[22px] border border-[var(--taupe)] bg-[var(--parchment)] p-2 shadow-[var(--shadow-xl)]">{searchResults.length>0?searchResults.map(result=><button key={result.id} type="button" onClick={()=>{setQuery('');router.push(result.href)}} className="flex w-full items-start gap-3 rounded-2xl px-3 py-3 text-left hover:bg-[var(--aged)] rtl:text-right"><span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-xl bg-[var(--aged)] text-[var(--terracotta)]"><Search size={14}/></span><span className="min-w-0 flex-1"><span className="block truncate text-sm font-semibold">{result.title}</span><span className="mt-1 block truncate text-xs text-[var(--graphite)]">{result.meta}</span></span><span className="rounded-full bg-[var(--aged)] px-2 py-1 text-[10px] font-semibold text-[var(--graphite)]">{result.type}</span></button>):<div className="px-3 py-4 text-sm text-[var(--graphite)]">No results found.</div>}</div>}</div>
        <div className="flex items-center gap-2"><button onClick={()=>setLang(lang==='en'?'ar':'en')} className="pill border border-[var(--taupe)] px-3 py-2 text-xs">{lang==='en'?'العربية':'English'}</button><button onClick={()=>setNotice(true)} className="relative grid size-10 place-items-center rounded-full hover:bg-[var(--aged)]"><Bell size={18}/><span className="absolute right-2 top-2 size-1.5 rounded-full bg-[var(--terracotta)]"/></button><button onClick={()=>openQuick()} className="grid size-10 place-items-center rounded-full bg-[var(--terracotta)] text-white"><Plus size={19}/></button><button onClick={()=>runQuick('Profile')} className="grid size-10 place-items-center rounded-full bg-[#dfc4b6] text-xs font-bold">AM</button></div>
      </header>
      <main className="mx-auto max-w-[1540px] px-4 py-8 sm:px-7 lg:px-9"><Screen current={current} setNotice={()=>setNotice(true)} runQuick={runQuick} openQuick={openQuick}/></main>
