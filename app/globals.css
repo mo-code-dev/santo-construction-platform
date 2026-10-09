@@ -1,137 +1,226 @@
 @import "tailwindcss";
 
-:root{
-  --terracotta:#b05a36;
-  --parchment:#fef9ef;
-  --aged:#f5eee1;
-  --taupe:#d1c9bf;
-  --ink:#2a2b2f;
-  --charcoal:#333333;
-  --graphite:#515151;
-  --ash:#808988;
-  --green:#5d7a67;
-  --amber:#aa7a3b;
-  --red:#a65b4f;
+:root {
+  --terracotta: #b05a36;
+  --parchment: #fef9ef;
+  --aged: #f5eee1;
+  --taupe: #d1c9bf;
+  --ink: #2a2b2f;
+  --charcoal: #333333;
+  --graphite: #515151;
+  --ash: #808988;
+  --green: #5d7a67;
+  --amber: #aa7a3b;
+  --red: #a65b4f;
 }
 
-*{
-  box-sizing:border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-html{
-  background:var(--parchment);
+html {
+  width: 100%;
+  min-height: 100%;
+  background: var(--parchment);
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-body{
-  margin:0;
-  background:var(--parchment);
-  color:var(--ink);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  letter-spacing:-.023em;
-  font-size:16px;
+body {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  overflow-x: clip;
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: -0.023em;
+  font-size: 16px;
 }
 
-button,
-input,
-select,
-textarea{
-  font:inherit;
-  font-size:15px;
+main,
+section,
+article,
+.card {
+  min-width: 0;
 }
 
-button{
-  cursor:pointer;
-}
-
-.serif{
-  font-family:Georgia,"Times New Roman",serif;
-  letter-spacing:-.045em;
-}
-
-.eyebrow{
-  font-size:12px;
-  line-height:1.4;
-  letter-spacing:.09em;
-  text-transform:uppercase;
-  color:var(--graphite);
-}
-
-.card{
-  background:var(--aged);
-  border:1px solid rgba(209,201,191,.75);
-  border-radius:24px;
-}
-
-.pill{
-  border-radius:999px;
-}
-
-.focus-ring:focus-visible{
-  outline:none;
-  box-shadow:0 0 0 3px rgba(176,90,54,.18);
-}
-
-::-webkit-scrollbar{
-  width:10px;
-  height:10px;
-}
-
-::-webkit-scrollbar-thumb{
-  background:#d3c8bb;
-  border-radius:99px;
-}
-
-::-webkit-scrollbar-track{
-  background:transparent;
-}
-
-/*
-  Santo readability pass
-  Keeps the premium hierarchy while making UI copy easier to scan.
-*/
-
-body{
-  font-size:16px;
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
 }
 
 button,
 input,
 select,
-textarea{
-  font-size:15px;
+textarea {
+  max-width: 100%;
+  font: inherit;
+  font-size: 15px;
 }
 
-.text-xs{
-  font-size:13px;
-  line-height:1.4;
+input,
+select,
+textarea {
+  min-width: 0;
 }
 
-.text-sm{
-  font-size:15px;
-  line-height:1.45;
+button {
+  cursor: pointer;
+  touch-action: manipulation;
 }
 
-.text-\[9px\]{
-  font-size:11px;
-  line-height:1.35;
+.serif {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: -0.045em;
 }
 
-.text-\[10px\]{
-  font-size:12px;
-  line-height:1.4;
+.eyebrow {
+  color: var(--graphite);
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
-.text-\[11px\]{
-  font-size:12px;
-  line-height:1.4;
+.card {
+  background: var(--aged);
+  border: 1px solid rgba(209, 201, 191, 0.75);
+  border-radius: 24px;
 }
 
-.text-\[12px\]{
-  font-size:13px;
-  line-height:1.4;
+.pill {
+  border-radius: 999px;
 }
 
-.text-\[15px\]{
-  font-size:16px;
-  line-height:1.5;
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(176, 90, 54, 0.18);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d3c8bb;
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Readability pass: keep labels readable without inflating the layout. */
+body {
+  font-size: 16px;
+}
+
+button,
+input,
+select,
+textarea {
+  font-size: 15px;
+}
+
+.text-xs {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.text-sm {
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.text-\[9px\] {
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.text-\[10px\] {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.text-\[11px\] {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.text-\[12px\] {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.text-\[15px\] {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Small-screen layout safeguards. */
+@media (max-width: 639px) {
+  body {
+    letter-spacing: -0.018em;
+  }
+
+  .card {
+    border-radius: 18px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.07em;
+  }
+
+  h1.serif {
+    font-size: clamp(2rem, 8vw, 2.75rem);
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+
+  .card.p-5 {
+    padding: 14px;
+  }
+
+  /* Prevent long identifiers and labels from forcing the viewport wider. */
+  h1,
+  h2,
+  h3,
+  p,
+  span {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 390px) {
+  .text-xs {
+    font-size: 12px;
+  }
+
+  .card.p-5 {
+    padding: 12px;
+  }
+
+  h1.serif {
+    font-size: clamp(1.85rem, 8vw, 2.25rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
